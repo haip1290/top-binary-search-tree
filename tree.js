@@ -104,7 +104,7 @@ export default class Tree {
 
   find(value) {
     let current = this.root;
-    while (current !== null) {
+    while (current) {
       if (current.data < value) {
         current = current.right;
       } else if (current.data > value) {
@@ -114,5 +114,72 @@ export default class Tree {
       }
     }
     return null;
+  }
+
+  levelOrder(callback) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback function is required");
+    }
+
+    if (this.root === null) {
+      return;
+    }
+    let queue = [this.root];
+    let i = 0;
+    while (i < queue.length) {
+      let current = queue[i++];
+      callback(current);
+      if (current.left !== null) {
+        queue.push(current.left);
+      }
+      if (current.right !== null) {
+        queue.push(current.right);
+      }
+    }
+  }
+
+  levelOrderRecursive(callback) {
+    if (typeof callback !== "function") {
+      throw Error("Callback function is required");
+    }
+    if (this.root === null) {
+      return;
+    }
+    const processLevel = (nodes) => {
+      if (nodes.length === 0) return;
+      let queue = [];
+      for (const node of nodes) {
+        callback(node);
+        if (node.right !== null) queue.push(node.right);
+        if (node.left !== null) queue.push(node.left);
+      }
+      processLevel(queue);
+    };
+    processLevel([this.root]);
+  }
+
+  height(node) {
+    if (node === null) return 0;
+    return 1 + Math.max(this.height(node.left), this.height(node.right));
+  }
+
+  levelOrderRecursiveVer2(callback) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback function is required");
+    }
+    const height = this.height(this.root);
+    for (let index = 1; index <= height; index++) {
+      processLevel(this.root, index, callback);
+    }
+
+    function processLevel(node, level, callback) {
+      if (node === null) return;
+      if (level === 1) {
+        callback(node);
+      } else {
+        processLevel(node.left, level - 1, callback);
+        processLevel(node.right, level - 1, callback);
+      }
+    }
   }
 }

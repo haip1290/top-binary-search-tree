@@ -32,3 +32,18 @@ prettyPrint(tree.find(22));
 prettyPrint(root);
 tree.delete(tree.root, 13);
 prettyPrint(root);
+
+console.log("Iterative level order:");
+tree.levelOrder(prettyPrint);
+
+console.log("Recursive level order:");
+tree.levelOrderRecursive(prettyPrint);
+
+console.log("Height of tree", tree.height(root));
+
+let tree2 = new Tree([1, 2, 5, 6, 13, 17, 22, 33, 44]);
+prettyPrint(tree2.root);
+console.log("Height of tree", tree2, tree2.height(tree2.root));
+
+console.log("Recursive ver 2:");
+tree2.levelOrderRecursiveVer2(prettyPrint);
