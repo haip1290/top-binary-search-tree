@@ -10,6 +10,13 @@ export default class Tree {
     return this._root;
   }
 
+  set root(node) {
+    if (!(node instanceof Node)) {
+      throw new Error("Input must be node");
+    }
+    this._root = node;
+  }
+
   buildTree(arr) {
     let end = arr.length;
     if (end === 0) return null;
@@ -181,5 +188,99 @@ export default class Tree {
         processLevel(node.right, level - 1, callback);
       }
     }
+  }
+
+  inOrder(callback) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback must be function");
+    }
+    let current = this.root;
+    let stack = [];
+    while (current !== null || stack.length > 0) {
+      while (current != null) {
+        stack.push(current);
+        current = current.left;
+      }
+      current = stack.pop();
+      callback(current);
+      current = current.right;
+    }
+  }
+
+  inOrderRecursive(node, callback) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback must be function");
+    }
+    if (node === null) return;
+    let current = node;
+
+    if (current.left !== null) this.inOrderRecursive(current.left, callback);
+    callback(current);
+    if (current.right !== null) this.inOrderRecursive(current.right, callback);
+  }
+
+  preOrder(callback) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback must be function");
+    }
+    let current = this.root;
+    let stack = [];
+    if (current !== null) {
+      stack.push(current);
+    }
+    while (stack.length > 0) {
+      current = stack.pop();
+      callback(current);
+      if (current.right !== null) {
+        stack.push(current.right);
+      }
+      if (current.left !== null) {
+        stack.push(current.left);
+      }
+    }
+  }
+
+  postOrder(node, callback) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback must be function");
+    }
+    if (node === null) return;
+    let current = node;
+    this.postOrder(current.left, callback);
+    this.postOrder(current.right, callback);
+    callback(current);
+  }
+  depth(node) {
+    let depth = 0;
+    let current = this.root;
+    while (current !== null) {
+      if (current.data < node.data) {
+        current = current.right;
+        depth++;
+      } else if (current.data > node.data) {
+        current = current.left;
+        depth++;
+      } else {
+        return depth;
+      }
+    }
+    return -1;
+  }
+  isBalance(node) {
+    if (node === null) return true;
+    let leftHeight = this.height(node.left);
+    let rightHeight = this.height(node.right);
+    return (
+      Math.abs(leftHeight - rightHeight) <= 1 &&
+      this.isBalance(node.left) &&
+      this.isBalance(node.right)
+    );
+  }
+
+  rebalance() {
+    let arr = [];
+    const createArr = (node) => arr.push(node.data);
+    this.inOrder(createArr);
+    this.root = this.buildTree(arr);
   }
 }
