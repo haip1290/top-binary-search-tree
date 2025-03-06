@@ -42,4 +42,32 @@ export default class Tree {
     }
     return root;
   }
+
+  insert(data) {
+    const newNode = new Node(data);
+    if (this.root === null) {
+      this.root = newNode;
+      return;
+    }
+    if (data === this.root.data) {
+      return;
+    }
+    let parent = null;
+    let current = this.root;
+    while (current !== null) {
+      parent = current;
+      if (current.data < data) {
+        current = current.right;
+      } else if (current.data > data) {
+        current = current.left;
+      } else {
+        return;
+      }
+    }
+    if (parent.data > data) {
+      parent.left = newNode;
+    } else {
+      parent.right = newNode;
+    }
+  }
 }

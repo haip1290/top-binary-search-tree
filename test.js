@@ -13,8 +13,14 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-let arr = [1, 2, 3, 4];
+let arr = [1, 5, 13, 24];
 let tree = new Tree(arr);
 let root = tree.root;
 
+prettyPrint(root);
+
+tree.insert(5);
+tree.insert(7);
+tree.insert(16);
+tree.insert(2);
 prettyPrint(root);
