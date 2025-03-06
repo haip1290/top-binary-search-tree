@@ -43,31 +43,76 @@ export default class Tree {
     return root;
   }
 
-  insert(data) {
-    const newNode = new Node(data);
+  insert(value) {
+    const newNode = new Node(value);
     if (this.root === null) {
       this.root = newNode;
       return;
     }
-    if (data === this.root.data) {
+    if (value === this.root.data) {
       return;
     }
     let parent = null;
     let current = this.root;
     while (current !== null) {
       parent = current;
-      if (current.data < data) {
+      if (current.data < value) {
         current = current.right;
-      } else if (current.data > data) {
+      } else if (current.data > value) {
         current = current.left;
       } else {
         return;
       }
     }
-    if (parent.data > data) {
+    if (parent.data > value) {
       parent.left = newNode;
     } else {
       parent.right = newNode;
     }
+  }
+
+  findSuccessor(node) {
+    if (node === null) {
+      return null;
+    }
+    node = node.right;
+    while (node !== null && node.left !== null) {
+      node = node.left;
+    }
+    return node;
+  }
+
+  delete(root, value) {
+    if (root === null) return root;
+    if (root.data < value) {
+      root.right = this.delete(root.right, value);
+    } else if (root.data > value) {
+      root.left = this.delete(root.left, value);
+    } else {
+      if (root.left === null) {
+        return root.right;
+      }
+      if (root.right === null) {
+        return root.left;
+      }
+      let successor = this.findSuccessor(root);
+      root.data = successor.data;
+      root.right = this.delete(root.right, successor.data);
+    }
+    return root;
+  }
+
+  find(value) {
+    let current = this.root;
+    while (current !== null) {
+      if (current.data < value) {
+        current = current.right;
+      } else if (current.data > value) {
+        current = current.left;
+      } else {
+        return current;
+      }
+    }
+    return null;
   }
 }

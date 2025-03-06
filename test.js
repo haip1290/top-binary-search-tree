@@ -24,3 +24,11 @@ tree.insert(7);
 tree.insert(16);
 tree.insert(2);
 prettyPrint(root);
+
+prettyPrint(tree.find(13));
+prettyPrint(tree.find(1));
+prettyPrint(tree.find(22));
+
+prettyPrint(root);
+tree.delete(tree.root, 13);
+prettyPrint(root);
